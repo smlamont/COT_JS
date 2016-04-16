@@ -1,0 +1,317 @@
+<section id="mainSection">
+<h1>Youth Services Search</h1>
+<!--a id="filterBlockToggle" href="#" class="filterBlock" role="link" tabindex="0"
+<div id="filterbtn" class="btn phidden" data-toggle="collapse" data-target="#filters"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Filters</div>
+-->
+    <div class="filterBlock" style="display:none"></div>
+    <div><div id="filterBlockToggle" class="btn btn-default filterBlock"><span id="iconFB" class="glyphicon glyphicon-chevron-down"></span><span> Filters</span></div>
+    <!--div onclick="toggleFB();" class="filterBlock"></div-->
+    
+    <div id="filterBlock" style="display: none">
+        <div class="row" data-container="body" data-html="true" data-toggle="tooltip" data-placement="top">    
+            <div class="col-xs-12 col-md-12">            
+                <div id="search" class="input-group">
+                    <div class="has-feedback">
+                        <input class="form-control hasclear" id="searchString" type="text" placeholder="Keyword Search">
+                        <span class="glyphicon glyphicon-remove form-control-feedback clearer" ></span>                  
+                    </div>
+                
+                    <div class="input-group-btn" >
+                        <button id="searchBtn" title="Search" class="btn btn-info" type="button">   
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+                        </button>
+                    </div>   
+					<!--
+					<div class="input-group-btn" >
+                        <button id="testBtn" title="Search" class="btn btn-info" type="button">   
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> test
+                        </button>
+                    </div>                  
+					-->
+                </div>
+            </div>
+        </div>
+                        
+        <div class="row">
+        <div class="col-xs-12 col-md-6">
+		  <div class="input-group">
+			<span class="srchLabel1 input-group-addon">Topic</span>
+			<select id="topicFilter" title="Topic Filter" class="form-control dataFilter hide" name="topicFilter" multiple="multiple"></select>
+			<!--
+			<div id="topicContainer" class="btn-group">
+				<button id="topicTreeBtn" class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button" title="">
+					<span class="multiselect-selected-text">All selected</span>
+					<b class="caret"></b>
+				</button>
+				
+				<ul id="topicTreeView" class="dropdown-menu" style="overflow-y: scroll;  width:100%"></ul>
+			</div>
+			-->
+		 </div>
+        </div>
+    </div> 
+     <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <div class="input-group">
+                <span class="srchLabel1 input-group-addon">Language</span>
+                <select id="langFilter" title="Language Filter" class="form-control dataFilter hide" name="langFilter" multiple="multiple">
+                    <option value="Arabic" selected="selected">Arabic</option>
+                    <option value="Chinese (Cantonese)" selected="selected">Cantonese</option>
+                    <option value="English" selected="selected">English</option>
+                    <option value="Farsi" selected="selected">Farsi or Persian</option>
+                    <option value="Filipino" selected="selected">Filipino</option>
+                    <option value="French" selected="selected">French</option>
+                    <option value="Italian" selected="selected">Italian</option>
+                    <option value="Chinese (Mandarin)" selected="selected">Mandarin</option>
+                    <option value="Portuguese" selected="selected">Portuguese</option>
+                    <option value="Russian" selected="selected">Russian</option>
+                    <option value="Spanish" selected="selected">Spanish</option>
+                    <option value="Tagalog" selected="selected">Tagalog</option>
+                    <option value="Tamil" selected="selected">Tamil</option>
+                    <option value="Urdu" selected="selected">Urdu</option>
+                </select>
+                <span class="glyphicon glyphicon-remove form-control-feedback clearer"></span>
+            </div>
+        </div>
+ 
+        <div class="col-xs-12 col-md-6">        
+            <div class="input-group">
+                <span class="srchLabel1 input-group-addon">Accessibility</span>
+                <select id="accFilter" title="Accessibility Filter" class="form-control dataFilter hide" name="accFilter" multiple="multiple">
+                    <option value="F" selected="selected">Fully Accessibile</option>
+                    <option value="P" selected="selected">Partially Accessible</option>
+                    <option value="N" selected="selected">Not accessible / Unknown</option>
+                </select>
+                <span class="glyphicon glyphicon-remove form-control-feedback clearer"></span>
+ 
+            </div>
+        </div>
+     </div>
+    </div> 
+</div>
+    
+    
+<div id="btnRow" class="row">
+    <div class="col-xs-12 col-sm-12 col-md-6">
+        <div id="tabToggle" class="btn-group btn-toggle pageToggle"> 
+            <button id="tabMap" title="Show map view" class="btn btn-primary pageToggleBtn active"> <span class="glyphicon glyphicon-map-marker"></span>&nbsp;&nbsp;Map View</button>
+            <button id="tabList" title="Show list view" class="btn btn-default pageToggleBtn"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;List View</button>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-3 pull-right" >
+       <button id="pdfbtn" title="Generate PDF of filtered orgranizations" class="btn btn-default pagebtn"><span><img src="http://www1.toronto.ca/static_files/assets/images/icons/pdficon.png"></span>&nbsp;&nbsp;Create PDF Report</button>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-3 pull-right" >
+        <button class="btn btn-default pagebtn" title="Toggle showing favorites" id="toggleShowFavs">
+            <span  class="glyphicon glyphicon-star" aria-hidden="true"></span>&nbsp;&nbsp;Show Only Favourites
+        </button>
+    </div>
+</div>
+    
+
+<div class="countTotal"><span id="countTotal">0</span> organizations found <span class="noLatLngTotal" style="display:none">(<span id="noLatLngTotal">0</span> missing map location)</span></div>
+
+<!--
+  <div class="btn-toggle"> 
+    <div class="col-xs-6 col-sm-6 col-md-2" style="padding-right: 0px;">
+        <button class="btn btn-md btn-default pagebtn pull-left">Map View</button>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-2" style="padding-left: 0px;">
+    <button class="btn btn-md btn-primary pagebtn pull-left" >List View</button>
+    </div>
+    </div>
+    <div class="row">
+
+    <div class="hidden-xs hidden-sm col-md-4">&nbsp;</div>
+    <div class="col-xs-6 col-sm-6 col-md-2 pull-right">
+       <button id="pdfbtn" class="btn btn-default pagebtn pull-right pdfreport"><span><img src="http://www1.toronto.ca/static_files/assets/images/icons/pdficon.png"></span> Create PDF Report</button>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-2 pull-right">
+    <button class="btn btn-default pagebtn" id="toggleShowFavs">
+        <span  class="glyphicon glyphicon-star" aria-hidden="true"></span> Show Only Favorites
+    </button>
+    </div>
+    </div>
+
+  </div>
+  -->
+ <!--
+<div id="viewToggleContainer">
+
+
+    <input class="pull-left" type="checkbox" id="viewToggle" checked >
+
+    <button id="pdfbtn" class="btn btn-default pagebtn pdfreport"><span><img src="http://www1.toronto.ca/static_files/assets/images/icons/pdficon.png"></span> Create PDF Report</button>
+    <button class="btn btn-default pagebtn" id="toggleShowFavs">
+        <span  class="glyphicon glyphicon-star" aria-hidden="true"></span> Show Only Favourites
+    </button>
+</div>
+-->
+<div class="clearfix"></div>
+
+ <div id="ysMap" >
+    <div class="col-xs-12 col-sm-6 col-md-12 mapTopLegend">
+        <span class="mapLegendIcon"><img id="img_multi" src="/static_files/WebApps/images/markerblue.png"><span> Multiple </span></span>
+        <span class="mapLegendIcon"><img id="img_single" src="/static_files/WebApps/images/markergreen.png"><span> Single </span></span>
+        <span class="mapLegendIcon"><img id="img_fav" src="/static_files/WebApps/images/markergreen_sel.png"><span> Favourite </span></span>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <input id="map-input" class="controls" type="text" placeholder="Search Box" >
+        <button id="resetMap" title="Reset map position" class="resetMap" value="Reset Map">Reset Map</button>
+        <!--div style="height: 468px; width: 100%;" -->
+        <div >
+            <div id="map-wrapper">
+                <div id="map-canvas"></div>
+                <!--div id="map-canvas" style="height: 100%; width: 100%;"></div-->
+                <!--
+                <p id="map-loader" class="center" style="display: none;">Loading...<br><img alt="loading" src="/static_files/assets/images/preload.gif"></p>
+                -->
+            </div>
+
+        </div>
+    </div>
+    </div>
+ </div>
+
+ 
+<div id="ysListing" style="display:none"></div>
+
+<div id="map-footer">
+    <div class="row">
+    <div class="col-md-12">
+        <div class="logo211 pull-right" >
+            <img src="/City%20Of%20Toronto/Sandbox/Steve/YouthServices/images/logo-211-ontario.png" alt="211 Ontario">
+        </div>
+        <span>
+            This information comes from <a href="http://www.211Ontario.ca" rel="external" target="_blank">211Ontario.ca</a>, a project of Findhelp Information Services. 
+        </span>
+    </div>                   
+    </div>                   
+</div>
+
+
+<div id="wait-loader" class="center" style="display: none;"><span>Loading...</span><br><img alt="loading" src="/static_files/assets/images/preload.gif"></div>
+    
+</section>
+<section id="detailSection">
+<div id="detailModal" class="modal fade" role="dialog">
+  <div class="modal-dialog YTModalWidth">
+   <div class="modal-content">
+     <div class="modal-header">
+		<button type="button" title="Close" class="close detailClose" ><span aria-hidden="true">&times;</span></button>	 
+		<h1 id="headerText"></h1>
+	</div>
+ <div class="modal-body">
+<div class="row">
+    <div id="left" class="col-md-8">
+    <div id="org-address"></div>
+    <div id="org-intersection" ></div>
+    <div>
+        <span id="org-phone-span" style="display: none;"><span>Phone: </span><span id="org-phone"></span></span>
+        <span id="org-fax-span" style="display: none;"><span> | Fax: </span><span id="org-fax"></span></span>
+    </div>
+
+    <div>
+        <span id="org-web-span" style="display: none;"><span></span><a target="_blank" href="" id="org-web"></a></span>
+        <span id="org-email-span" style="display: none;"><span> | </span><a href="" id="org-email"></a></span>
+    </div>
+    <div>&nbsp;</div>
+    <div>
+        <span id="org-publicComments-span" style="display: none;"><span class="detailLabel">Notice: </span><span id="org-publicComments"></span></span>
+    </div>  
+    <div>
+        <span id="org-mailAddress-span" style="display: none;"><span class="detailLabel">Mailing Address: </span><span id="org-mailAddress"></span></span>
+    </div>
+    <div>
+        <span id="org-tty-span" style="display: none;"><span class="detailLabel">TTY: </span><span id="org-tty"></span></span>
+    </div>
+    <div>
+        <span id="org-freePhone-span" style="display: none;"><span class="detailLabel">Toll Free: </span><span id="org-freePhone"></span></span>
+    </div>
+    <div>
+        <span id="org-crisisPhone-span" style="display: none;"><span class="detailLabel">Crisis Phone: </span><span id="org-crisisPhone"></span></span>
+    </div>
+    <div>
+        <span id="org-afterHoursPhone-span" style="display: none;"><span class="detailLabel">After Hours Phone: </span><span id="org-afterHoursPhone"></span></span>
+    </div>
+    <div>
+        <span id="org-serviceContact1-span" style="display: none;"><span class="detailLabel">Service Contact: </span><span id="org-serviceContact1"></span></span>
+    </div>
+    <div>
+        <span id="org-serviceContact2-span" style="display: none;"><span class="detailLabel">Service Contact: </span><span id="org-serviceContact2"></span></span>
+    </div>
+    <div>
+        <span id="org-location-span" style="display: none;"><span class="detailLabel">Location: </span><span id="org-location"></span></span>
+    </div>
+    <div>
+        <span id="org-serviceAreaBoundaries-span" style="display: none;"><span class="detailLabel">Boundaries: </span><span id="org-serviceAreaBoundaries"></span></span>
+    </div>
+    <div>
+        <span id="org-hours-span" style="display: none;"><span class="detailLabel">Hours: </span><span id="org-hours"></span></span>
+    </div>
+    <div>
+        <span id="org-eligibilityNotes-span" style="display: none;"><span class="detailLabel">Eligibility: </span><span id="org-eligibilityNotes"></span></span>
+    </div>
+    <div>
+        <span class="detailLabel">Services: </span>
+    </div>
+    <div id="org-services">
+    </div>
+    <div>
+        <span id="org-application-span" style="display: none;"><span class="detailLabel">How to apply: </span><span id="org-application"></span></span>
+    </div>
+    <div>
+        <span id="org-serviceLanguages-span" style="display: none;"><span class="detailLabel">Languages: </span><span id="org-serviceLanguages"></span>
+        <span id="org-serviceLanguagesNotes-span" style="display: none;"><span> | </span><span href="" id="org-serviceLanguagesNotes"></span></span>
+        </span>
+    </div>
+    <div>
+        <span id="org-fees-span" style="display: none;"><span class="detailLabel">Fees: </span><span id="org-fees"></span></span>
+    </div>
+    <div>
+        <span id="org-accessibility-span" style="display: none;"><span class="detailLabel">Accessibility: </span><span id="org-accessibility"></span></span>
+        <span id="org-accessibilityNotes-span" style="display: none;"><span> - </span><span id="org-accessibilityNotes"></span></span>
+        
+    </div>
+    <div>
+        <span id="org-legalStatus-span" style="display: none;"><span class="detailLabel">Legal Status: </span><span id="org-legalStatus"></span></span>
+    </div>
+    <div>
+        <span id="org-lastFullUpdate-span" style="display: none;"><span class="detailLabel">Last Full Update: </span><span id="org-lastFullUpdate"></span></span>
+    </div>
+    <div>
+        <span id="org-lastModified-span" style="display: none;"><span class="detailLabel">Last Modified: </span><span id="org-lastModified"></span></span>
+    </div>
+    <div>
+        <span id="org-fid-span" style="display: none;"><span class="detailLabel"></span><a id="211Link" target="_blank" href="http://www.211toronto.ca/detail/en">211 Link</a></span>
+    </div>
+</div>
+
+<div id="detailMap" class="col-md-4">
+    <div id="detail-map-wrapper">
+        <div id="detail-map-canvas" style="height: 300px; width: 100%;"></div>
+    </div>
+    <button id="ttcBtn" title="TTC Trip Planner" type="button" class="btn btn-danger"><span style="text-align: center">TTC Trip Planner</span></button>
+</div>
+</div>    
+</div>
+	<div class="modal-footer">
+        <button id="detailClose" type="button" class="btn btn-default detailClose" data-dismiss="modal">Close</button>
+      </div>
+</div> 
+</div>   
+</div>
+<!--
+<div class="clearfix"></div>
+<div class="col-md-12 media hidden-print">
+<hr>
+<span >Back to: </span><button id="BackTo" title="Go to Youth Services search main page" class="btn btn-link">Youth Services Search</button>
+
+</div>
+-->
+</section>
+
+
+
