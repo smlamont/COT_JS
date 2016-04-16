@@ -1,0 +1,210 @@
+/* notes
+   each URL has a token, It hsould be same for all.
+*/
+var topicURL = "http://testapi.findhelp.ca/services/rest/v1/topic/json?authToken=TSTcitytor&appRegion=Toronto%20%28City%29";
+var orgURL = "http://testapi.findhelp.ca/services/rest/v1/orginfo/JSON?authToken=TSTcitytor&fid=";
+
+// var topics = ['YAP001'];
+ 
+var topics = [
+'YAP001',
+'YAP009',
+'YAP010',
+'YAP011',
+'YAP013',
+'YAP014',
+'YAP015',
+'YAP016',
+'YAP017',
+'YAP018',
+'YAP019',
+'YAP020',
+'YAP021',
+'YAP022',
+'YAP023',
+'YAP024',
+'YAP025',
+'YAP028',
+'YAP029',
+'YAP030',
+'YAP031',
+'YAP032',
+'YAP033',
+'YAP034',
+'YAP035',
+'YAP036',
+'YAP037',
+'YAP038',
+'YAP039',
+'YAP040',
+'YAP041',
+'YAP042',
+'YAP043',
+'YAP044',
+'YAP045',
+'YAP046',
+'YAP047',
+'YAP049',
+'YAP050',
+'YAP052',
+'YAP053',
+'YAP054',
+'YAP055',
+'YAP056',
+'YAP057',
+'YAP058',
+'YAP059',
+'YAP060',
+'YAP062',
+'YAP063',
+'YAP064',
+'YAP065',
+'YAP066',
+'YAP067',
+'YAP069',
+'YAP070',
+'YAP072',
+'YAP073',
+'YAP074',
+'YAP075',
+'YAP076',
+'YAP077',
+'YAP078',
+'YAP079',
+'YAP080',
+'YAP081',
+'YAP082',
+'YAP083',
+'YAP084',
+'YAP085',
+'YAP086',
+'YAP087',
+'YAP088',
+'YAP091',
+'YAP092',
+'YAP093',
+'YAP094',
+'YAP095',
+'YAP096',
+'YAP097',
+'YAP071',
+'YAP061',
+'YAP068',
+'YAP089',
+'YAP090']
+
+
+var topicDescriptions = [];
+var orgArray = [];
+
+
+function get211Data() {
+  var retData = {};
+ 
+ 
+  for (var i = 0; i < topics.length; i++) {
+    var strURL = topicURL + "&query=" + topics[i] + "&startIndex=1&pageLimit=1000" ; 
+  
+    var status = UrlFetchApp.fetch(strURL);
+    var jsonData = JSON.parse(status.getContentText("UTF-8"));
+    retData[topics[i]] = jsonData;
+    var topicDesc = { 'topic' : topics[i] , 'desc' :   jsonData.searchTerm , 'numResults' : jsonData.numResults };
+    topicDescriptions.push(topicDesc);
+    //retData.push.apply(retData, jsonData.data);
+   // retData.push(jsonData.data);
+  }
+  return retData;
+}
+
+
+function getUniqueOrgs(allTopicData) {
+  var allOrgs = {};
+  
+  Object.keys(allTopicData).forEach(function(key, idx, array) {
+            for (var j=0 ; j <  allTopicData[key].data.length ; j ++) {
+                var org = allTopicData[key].data[j];
+              if (allOrgs[org.fid]) {
+                 allOrgs[org.fid].Topic += "," + key;
+              } else {
+                org.Topic = key;
+                allOrgs[org.fid] = org;
+              }
+            }
+
+            });
+  
+  return allOrgs;
+}
+
+function getDetailOrgData(orgs) {
+  
+  var enhancedOrgs = {};
+  Object.keys(orgs).forEach(function(key, idx, array) {
+      
+      var strURL = orgURL + key; 
+      var status = UrlFetchApp.fetch(strURL);
+      var jsonData = JSON.parse(status.getContentText("UTF-8"));
+      var org = orgs[key];
+      delete org.language;
+      delete org.orgId;
+      org.serviceLanguages = jsonData.serviceLanguages;
+      var acc = ""
+      if  (jsonData.accessibility.indexOf("Fully Accessible") > -1) 
+      { 
+        acc = "F";
+       
+      } else if (jsonData.accessibility.indexOf("Not Accessible") > -1 || 
+           jsonData.accessibility.indexOf("Unknown") > -1 || 
+           jsonData.accessibility.indexOf("Not Applicable") > -1 ) {                  
+             acc = "N";
+      } else {
+             acc = "P";
+      }
+                                                                     
+      org.accessibility = jsonData.accessibility;
+      org.acc = acc;
+      enhancedOrgs[key] = org;
+      orgArray.push(org);
+  });
+  
+  return enhancedOrgs;
+  
+}
+
+
+function createFile(fName, jsonData) {
+  //https://drive.google.com/folderview?id=0B-j2Y49nfiw2NTJCZHUtN05tb3M&usp=sharing   -- public folder
+  var targetFolder = DriveApp.getFolderById("0B-j2Y49nfiw2NTJCZHUtN05tb3M");
+  
+  var fi = DriveApp.getFilesByName(fName + ".json");
+  while (fi.hasNext()) {
+    var eachFile = fi.next();
+    eachFile.setTrashed(true);
+  }
+
+  file = targetFolder.createFile(fName + ".json", jsonData);
+  
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return file;
+}
+
+
+function createJSONFile() {  
+  
+  var topicData = get211Data();
+  createFile("TopicData", JSON.stringify(topicData));
+  
+  var orgData = getUniqueOrgs(topicData);
+  createFile("UniqueOrgData", JSON.stringify(orgData));
+  
+  var eorgData = getDetailOrgData(orgData);
+  createFile("EnhancedOrgData", JSON.stringify(eorgData));
+
+  createFile("YS_TopicDescriptions", JSON.stringify(topicDescriptions));
+
+  createFile("YS_OrganizationData", JSON.stringify(orgArray));
+
+  
+  
+//  updateMasterKML( urlDL ); 
+}
